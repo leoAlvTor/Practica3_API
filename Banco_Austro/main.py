@@ -1,9 +1,15 @@
+# Libraries for API definition
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
+# Class for Mysql database connection.
 import mysql_utility
+
+# Class for request model parameters.
 from pydantic import BaseModel
 
+# FastAPI instantiation.
 app = FastAPI()
 db_connection = mysql_utility.DBConnector()
 
