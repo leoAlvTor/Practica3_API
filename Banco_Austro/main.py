@@ -70,6 +70,11 @@ async def get_saldo(cedula: str, cuenta_id: str):
 
 @app.post('/private/transferencia')
 async def transferir_saldo(datos: Transferencia):
+    """
+    Method for transferring money between accounts.
+    :param datos: A valid JSON containing information about the transaction to being processed.
+    :return: A message containing information about the transaction (Refer to mysql_utility.py for checking messages).
+    """
     query_return = db_connection.execute_query(db_connection.sql_dict.get('realizer_transferencia'),
                                                (datos.cedula, datos.institucion_destino, datos.origen, datos.destino,
                                                 datos.monto, datos.motivo))
