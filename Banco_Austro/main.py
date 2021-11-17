@@ -13,8 +13,8 @@ from pydantic import BaseModel
 app = FastAPI()
 db_connection = mysql_utility.DBConnector()
 
+# CORS definition.
 origins = ["*"]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -24,6 +24,7 @@ app.add_middleware(
 )
 
 
+# Class for request model parameters.
 class Transferencia(BaseModel):
     cedula: str
     institucion_destino: str
@@ -33,13 +34,14 @@ class Transferencia(BaseModel):
     motivo: str
 
 
-@app.get("/")
-async def main():
-    return {"message": "Hello World"}
-
-
 @app.post('/login')
 async def login(cedula: str, password: str):
+    """
+    Method for logging in.
+    :param cedula: The ID of the user.
+    :param password: The password of the user.
+    :return: status successful if user exists otherwise raise a new Http Exception with status code 500.
+    """
     query_return = db_connection.execute_query(db_connection.sql_dict.get('login'),
                                                (cedula, password))[0][0]
     match query_return:
@@ -51,6 +53,13 @@ async def login(cedula: str, password: str):
 
 @app.get('/private/saldo_actual')
 async def get_saldo(cedula: str, cuenta_id: str):
+    """
+    Method for checking account balance.
+    :param cedula: The Id of the user.
+    :param cuenta_id: The account number of the user.
+    :return: the current balance according ID and account number otherwise return Http Exception if the ID or account
+    number is incorrect.
+    """
     query_return = db_connection.execute_query(db_connection.sql_dict.get('saldo_actual'), (cedula, cuenta_id))
     match len(query_return):
         case 0:
