@@ -8,7 +8,9 @@ class DBConnector:
     sql_dict = {
         'login': 'select count(*) from CLIENTE where cedula = %s and password = %s',
         'saldo_actual': 'select saldo_actual from CUENTA_FINANCIERA where cliente_cedula = %s and numero_cuenta = %s',
-        'realizer_transferencia': 'select realizar_transferencia(%s, %s, %s, %s, %s, %s)'
+        'mis_cuentas': 'select numero_cuenta from CUENTA_FINANCIERA where cliente_cedula = %s',
+        'realizar_transferencia': 'select realizar_transferencia(%s, %s, %s, %s, %s, %s)',
+        'buscar_usuario': 'select cedula from CLIENTE'
     }
 
     # Dict containing Error/Message codes related to SQL returns.
