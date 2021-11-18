@@ -63,13 +63,18 @@ async def get_saldo(cedula: str, cuenta_id: str):
     query_return = db_connection.execute_query(db_connection.sql_dict.get('saldo_actual'), (cedula, cuenta_id))
     match len(query_return):
         case 0:
-            raise HTTPException(status_code=500, detail='El # Cedula/Cuenta no es correcto.')
+            return {'status': 'El # Cedula/Cuenta no es correcto.'}
         case _:
             return query_return[0][0]
 
 
 @app.get('/api/private/mis_cuentas')
 async def get_cuentas(cedula: str):
+    """
+    Function for getting all economic accounts by user.
+    :param cedula: The user ID
+    :return: status with data related to accounts number otherwise return an error.
+    """
     query_return = db_connection.execute_query(db_connection.sql_dict.get('mis_cuentas'), (cedula,))
     match len(query_return):
         case 0:
@@ -90,6 +95,6 @@ async def transferir_saldo(datos: Transferencia):
                                                 datos.monto, datos.motivo))
     match len(query_return):
         case 0:
-            raise HTTPException(status_code=418, detail='Error while trying to work with database! ??')
+            return {'status': 'Error while trying to work with database! ??'}
         case _:
             return {'status': db_connection.messages_dict.get(query_return[0][0])}
