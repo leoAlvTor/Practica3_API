@@ -34,7 +34,7 @@ class Transferencia(BaseModel):
     motivo: str
 
 
-@app.post('/login')
+@app.post('/api/login')
 async def login(cedula: str, password: str):
     """
     Method for logging in.
@@ -48,10 +48,10 @@ async def login(cedula: str, password: str):
         case 1:
             return {'status': 'successful'}
         case 0:
-            raise HTTPException(status_code=500, detail='Cedula o Password incorrectos.')
+            return {'status': 'Cedula o Password incorrectos.'}
 
 
-@app.get('/private/saldo_actual')
+@app.get('/api/private/saldo_actual')
 async def get_saldo(cedula: str, cuenta_id: str):
     """
     Method for checking account balance.
@@ -68,7 +68,17 @@ async def get_saldo(cedula: str, cuenta_id: str):
             return query_return[0][0]
 
 
-@app.post('/private/transferencia')
+@app.get('/api/private/mis_cuentas')
+async def get_cuentas(cedula: str):
+    query_return = db_connection.execute_query(db_connection.sql_dict.get('mis_cuentas'), (cedula,))
+    match len(query_return):
+        case 0:
+            return {'status': 'No hay cuentas asociadas a la cedula ingresada.'}
+        case _:
+            return {'status': 'successful', 'data': [x[0] for x in query_return]}
+
+
+@app.post('/api/private/transferencia')
 async def transferir_saldo(datos: Transferencia):
     """
     Method for transferring money between accounts.
