@@ -90,9 +90,10 @@ async def transferir_saldo(datos: Transferencia):
     :param datos: A valid JSON containing information about the transaction to being processed.
     :return: A message containing information about the transaction (Refer to mysql_utility.py for checking messages).
     """
-    query_return = db_connection.execute_query(db_connection.sql_dict.get('realizer_transferencia'),
+    query_return = db_connection.execute_query(db_connection.sql_dict.get('realizar_transferencia'),
                                                (datos.cedula, datos.institucion_destino, datos.origen, datos.destino,
                                                 datos.monto, datos.motivo))
+    db_connection.db.commit()
     match len(query_return):
         case 0:
             return {'status': 'Error while trying to work with database! ??'}
