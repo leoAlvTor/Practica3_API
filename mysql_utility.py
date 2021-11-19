@@ -10,7 +10,7 @@ class DBConnector:
         'saldo_actual': 'select saldo_actual from CUENTA_FINANCIERA where cliente_cedula = %s and numero_cuenta = %s',
         'mis_cuentas': 'select numero_cuenta from CUENTA_FINANCIERA where cliente_cedula = %s',
         'realizar_transferencia': 'select realizar_transferencia(%s, %s, %s, %s, %s, %s)',
-        'buscar_usuario': 'select cedula from CLIENTE'
+        'buscar_usuario': 'select cedula from CLIENTE',
     }
 
     # Dict containing Error/Message codes related to SQL returns.
@@ -42,7 +42,6 @@ class DBConnector:
         """
         cursor = self.db.cursor()
         if parameters is not None:
-
             cursor.execute(sql_query, parameters)
             return cursor.fetchall()
         else:
