@@ -42,6 +42,7 @@ class DBConnector:
         """
         cursor = self.db.cursor()
         if parameters is not None:
+
             cursor.execute(sql_query, parameters)
             return cursor.fetchall()
         else:
