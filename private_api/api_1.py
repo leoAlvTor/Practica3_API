@@ -21,7 +21,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 def listToStringWithoutBrackets(list1):
     return str(list1).replace('(', '').replace(')', '').replace(',', '').replace('[', '').replace(']', '').replace('{',
                                                                                                                    '').replace(
