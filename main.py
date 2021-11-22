@@ -5,6 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Class for Mysql database connection.
 import mysql_utility
+import AUSTRO.AustroDB_utility
+import JEP.JepDB_utility
+import PICHINCHA.PichinchaDB_utility
 
 # Class for request model parameters.
 from pydantic import BaseModel
@@ -12,6 +15,9 @@ from pydantic import BaseModel
 # FastAPI instantiation.
 app = FastAPI()
 db_connection = mysql_utility.DBConnector()
+au_conecction = AUSTRO.AustroDB_utility.DBConnector()
+pi_connection=PICHINCHA.PichinchaDB_utility.DBConnector()
+je_connection=JEP.JepDB_utility.DBConnector()
 
 # CORS definition.
 origins = ["*"]
@@ -93,9 +99,12 @@ async def transferir_saldo(datos: Transferencia):
     query_return = db_connection.execute_query(db_connection.sql_dict.get('realizar_transferencia'),
                                                (datos.cedula, datos.institucion_destino, datos.origen, datos.destino,
                                                 datos.monto, datos.motivo))
-    db_connection.db.commit()
+
     match len(query_return):
         case 0:
             return {'status': 'Error while trying to work with database! ??'}
         case _:
             return {'status': db_connection.messages_dict.get(query_return[0][0])}
+
+
+
