@@ -32,7 +32,7 @@ class DBConnector:
             host='localhost',
             user='monty',
             password='montypassword',
-            database='Bnacopichincha'
+            database='BancoPichincha'
         )
 
     def execute_query(self, sql_query: str, parameters: tuple):
