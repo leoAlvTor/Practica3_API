@@ -6,11 +6,11 @@ class DBConnector:
 
     # Dict containing SQL queries related to database.
     sql_dict = {
-        'login': 'select count(*) from CLIENTE where cedula = %s and password = %s',
+        'login': 'select count(*) from cliente where cedula = %s and password = %s',
         'saldo_actual': 'select saldo_actual from CUENTA_FINANCIERA where cliente_cedula = %s and numero_cuenta = %s',
         'mis_cuentas': 'select numero_cuenta from CUENTA_FINANCIERA where cliente_cedula = %s',
-        'realizar_transferencia': 'select realizar_transferencia(%s, %s, %s, %s, %s, %s)',
-        'buscar_usuario': 'select correo from CLIENTE where cedula = %s'
+        'realizar_transferencia': 'select realizar_transferencia(%s, %sCLIENTE, %s, %s, %s, %s)',
+        'buscar_usuario': 'select correo from cliente where cedula = %s'
     }
 
     # Dict containing Error/Message codes related to SQL returns.
@@ -30,7 +30,7 @@ class DBConnector:
             host='localhost',
             user='monty',
             password='montypassword',
-            database='practica2'
+            database='central'
         )
 
     def execute_query(self, sql_query: str, parameters: tuple):
