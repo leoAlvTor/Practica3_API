@@ -84,7 +84,7 @@ async def get_cuentas(cedula: str):
 
 
 @app.post('/api/private/transferencia')
-async def transferir_saldo(cedula, institucion_destino, origen, destino, monto, motivo):
+async def transferir_saldo(datos: Transferencia):
     """
     Method for transferring money between accounts.
     :param datos: A valid JSON containing information about the transaction to being processed.
