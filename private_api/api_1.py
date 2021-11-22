@@ -22,6 +22,7 @@ app.add_middleware(
 )
 
 
+
 def listToStringWithoutBrackets(list1):
     return str(list1).replace('(', '').replace(')', '').replace(',', '').replace('[', '').replace(']', '').replace('{',
                                                                                                                    '').replace(
