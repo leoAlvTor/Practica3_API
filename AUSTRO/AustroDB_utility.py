@@ -8,8 +8,8 @@ class DBConnector:
     sql_dict = {
         'obtener_institucion': 'select count(*) from Cliente where cedula = %s',
         'saldo_actual': 'select saldo from Cuenta where cliente_id = %s and cuenta_id = %s',
-        'debito': ' update Cuenta set saldo = saldo - %s   where Cuenta where cliente_id = %s and cuenta_id = %s',
-        'deposito': ' update Cuenta set saldo = saldo + %s where Cuenta where cliente_id = %s and cuenta_id = %s',
+        'debito': ' update Cuenta set saldo = saldo - %s where cliente_id = %s and cuenta_id = %s',
+        'deposito': ' update Cuenta set saldo = saldo + %s where cliente_id = %s and cuenta_id = %s',
         'mis_cuentas': 'select numero_cuenta from CUENTA_FINANCIERA where cliente_cedula = %s',
         'realizar_transferencia': 'select realizar_transferencia(%s, %s, %s, %s, %s, %s)',
         'buscar_usuario': 'select cedula from CLIENTE'
@@ -44,7 +44,7 @@ class DBConnector:
         """
         cursor = self.db.cursor()
         if parameters is not None:
-
+            print(sql_query, '___', parameters)
             cursor.execute(sql_query, parameters)
             return cursor.fetchall()
         else:

@@ -34,7 +34,7 @@ class Transferencia(BaseModel):
 
 @app.get('/austro/private/cuenta')
 async def institucion(cedula: str):
-    austro = au_conecction.execute_query(au_conecction.sql_dict.get('obtener_institucion'), (cedula))
+    austro = au_conecction.execute_query(au_conecction.sql_dict.get('obtener_institucion'), (cedula,))
     match len(austro):
         case 0:
             return {'status': '0'}
@@ -48,6 +48,7 @@ async def debito(cedula: str, origen: str, monto: int):
     if len(saldo_actual) >0:
         if saldo_actual[0][0] > monto:
             debito=au_conecction.execute_query(au_conecction.sql_dict.get('debito'),(monto,cedula,origen))
+            print('Paso debido')
             au_conecction.execute_query('commit', None)
             return {'status': 'Debito Realizado'}
         return {'status': 'Error en la transaccion'}
