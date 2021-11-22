@@ -24,14 +24,14 @@ app.add_middleware(
 
 @app.get('/pichincha/private/cuenta')
 async def institucion(cedula: str):
-    pichibcha = pi_connection.execute_query(pi_connection.sql_dict.get('obtener_institucion'), (cedula))
+    pichibcha = pi_connection.execute_query(pi_connection.sql_dict.get('obtener_institucion'), (cedula,))
     match len(pichibcha):
         case 0:
             return {'status': '0'}
         case _:
             return {'status': '1'}
 
-@app.post('pichincha/private/debito')
+@app.post('/pichincha/private/debito')
 async def debito(cedula: str, origen: str, monto: int):
     saldo_actual=pi_connection.execute_query(pi_connection.sql_dict.get('saldo_actual'),(cedula, origen))
     if len(saldo_actual) > 0:
@@ -42,8 +42,8 @@ async def debito(cedula: str, origen: str, monto: int):
         return {'status': 'Error en la transaccion'}
 
 
-@app.post('pichincha/private/deposito')
+@app.post('/pichincha/private/deposito')
 async def deposito(cedula: str, destino: str, monto: int):
     deposito=pi_connection.execute_query(pi_connection.sql_dict.get('deposito'),(monto,cedula,destino))
     pi_connection.execute_query('commit', None)
-    return {'status': 'Debito Realizado'}
+    return {'status': 'Deposito Realizado'}
