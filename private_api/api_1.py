@@ -11,7 +11,6 @@ import smtplib
 app = FastAPI()
 db_connection = mysql_utility.DBConnector()
 
-
 # CORS definition.
 origins = ["*"]
 app.add_middleware(
