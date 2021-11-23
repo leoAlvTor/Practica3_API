@@ -6,10 +6,10 @@ class DBConnector:
 
     # Dict containing SQL queries related to database.
     sql_dict = {
-        'obtener_institucion': 'select count(*) from CLIENTE where cedula = %s',
-        'saldo_actual': 'select saldo from CUENTA_FINANCIERA where cliente_cedula = %s and numero_cuenta = %s',
-        'debito': ' update CUENTA set saldo = saldo - %s  from CUENTA where cliente_cedula = %s and numero_cuenta = %s',
-        'deposito': ' update CUENTA set saldo = saldo + %s  from CUENTA where cliente_cedula = %s and numero_cuenta = %s',
+        'obtener_institucion': 'select count(*) from Cliente where cedula = %s',
+        'saldo_actual': 'select saldo from Cuenta where cliente_id = %s and cuenta_id = %s',
+        'debito': ' update CUENTA set saldo = saldo - %s  where  Cuenta where cliente_id = %s and cuenta_id = %s',
+        'deposito': ' update CUENTA set saldo = saldo + %s  from Cuenta where cliente_id = %s and cuenta_id = %s',
         'mis_cuentas': 'select numero_cuenta from CUENTA_FINANCIERA where cliente_cedula = %s',
         'realizar_transferencia': 'select realizar_transferencia(%s, %s, %s, %s, %s, %s)',
         'buscar_usuario': 'select cedula from CLIENTE'
