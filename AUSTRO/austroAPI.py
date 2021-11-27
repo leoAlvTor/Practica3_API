@@ -43,10 +43,10 @@ async def institucion(cedula: str):
 
 
 @app.post('/austro/private/debito')
-async def debito(cedula: str, origen: str, monto: int):
+async def debito(cedula , origen , monto ):
     saldo_actual=au_conecction.execute_query(au_conecction.sql_dict.get('saldo_actual'),(cedula,origen))
     if len(saldo_actual) >0:
-        if saldo_actual[0][0] > monto:
+        if saldo_actual[0][0] > float(monto):
             debito=au_conecction.execute_query(au_conecction.sql_dict.get('debito'),(monto,cedula,origen))
             print('Paso debido')
             au_conecction.execute_query('commit', None)
@@ -54,7 +54,7 @@ async def debito(cedula: str, origen: str, monto: int):
         return {'status': 'Error en la transaccion'}
 
 @app.post('/austro/private/deposito')
-async def deposito(cedula: str, destino: str, monto: int):
+async def deposito(cedula , destino , monto):
     deposito=au_conecction.execute_query(au_conecction.sql_dict.get('deposito'),(monto,cedula,destino))
     au_conecction.execute_query('commit', None)
     return {'status': 'Deposito Realizado'}

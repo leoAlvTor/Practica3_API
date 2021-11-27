@@ -32,10 +32,11 @@ async def institucion(cedula: str):
             return {'status': '1'}
 
 @app.post('/pichincha/private/debito')
-async def debito(cedula: str, origen: str, monto: int):
+async def debito(cedula , origen , monto):
+
     saldo_actual=pi_connection.execute_query(pi_connection.sql_dict.get('saldo_actual'),(cedula, origen))
     if len(saldo_actual) > 0:
-        if saldo_actual[0][0] > monto:
+        if saldo_actual[0][0] > float(monto):
             debito=pi_connection.execute_query(pi_connection.sql_dict.get('debito'),(monto,cedula,origen))
             pi_connection.execute_query('commit', None)
             return {'status': 'Debito Realizado'}
@@ -43,7 +44,7 @@ async def debito(cedula: str, origen: str, monto: int):
 
 
 @app.post('/pichincha/private/deposito')
-async def deposito(cedula: str, destino: str, monto: int):
+async def deposito(cedula, destino, monto):
     deposito=pi_connection.execute_query(pi_connection.sql_dict.get('deposito'),(monto,cedula,destino))
     pi_connection.execute_query('commit', None)
     return {'status': 'Deposito Realizado'}

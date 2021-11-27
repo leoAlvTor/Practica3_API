@@ -28,7 +28,7 @@ def listToStringWithoutBrackets(list1):
 
 
 @app.post('/api/private/send_mail')
-async def send_mail(cedula: str, motivo: str, monto: float):
+async def send_mail(cedula, motivo, monto):
     print('cedula:', cedula, ' <---')
     query_return = db_connection.execute_query(db_connection.sql_dict.get('buscar_usuario'),
                                                (cedula,))
@@ -40,11 +40,11 @@ async def send_mail(cedula: str, motivo: str, monto: float):
             # correo = listToStringWithoutBrackets(query_return)
             correo = query_return[0][0]
             print(correo)
-            send_email(correo, motivo, monto)
+            send_email(correo, motivo, float(monto))
             return {'status': 'successful'}
 
 
-def send_email(correo: str, descripcion: str, valor: float):
+def send_email(correo, descripcion, valor):
     gmail_user = 'alvaradolayonardo@gmail.com'
     gmail_password = 'mqjjqbpmctkleorb'
 
