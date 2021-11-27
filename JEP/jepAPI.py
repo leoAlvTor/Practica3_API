@@ -54,3 +54,17 @@ async def deposito(cedula , destino , monto ):
 @app.get('/jep/private/hola')
 async def leo(cedula, origen, monto):
     return {'status': 'leo'}
+
+@app.get('/api/private/mis_cuentas')
+async def get_cuentas(cedula: str):
+    """
+    Function for getting all economic accounts by user.
+    :param cedula: The user ID
+    :return: status with data related to accounts number otherwise return an error.
+    """
+    query_return = db_connection.execute_query(db_connection.sql_dict.get('mis_cuentas'), (cedula,))
+    match len(query_return):
+        case 0:
+            return {'status': 'No hay cuentas asociadas a la cedula ingresada.'}
+        case _:
+            return {'status': 'successful', 'data': [x[0] for x in query_return]}
