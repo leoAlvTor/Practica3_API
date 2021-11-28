@@ -1,10 +1,10 @@
-# Library for connecting to the database.
+# Libreria para conectarse a la base de datos.
 import mysql.connector
 
 
 class DBConnector:
 
-    # Dict containing SQL queries related to database.
+    # Diccionario que contiene consultas SQL relacionadas con la base de datos.
     sql_dict = {
         'login': 'select count(*) from cliente where cedula = %s and password = %s',
         'saldo_actual': 'select saldo_actual from CUENTA_FINANCIERA where cliente_cedula = %s and numero_cuenta = %s',
@@ -13,7 +13,7 @@ class DBConnector:
         'buscar_usuario': 'select correo from cliente where cedula = %s'
     }
 
-    # Dict containing Error/Message codes related to SQL returns.
+    # #Diccionario que contiene códigos de error / mensaje relacionados con devoluciones de SQL.
     messages_dict = {
         0: 'Se realizo la transferencia correctamente',
         -1: 'No tiene saldo suficiente para hacer la transferencia',
@@ -23,8 +23,8 @@ class DBConnector:
 
     def __init__(self):
         """
-        Class constructor.
-        Creates a new instance of mysql connector using connection parameters.
+        Constructor de clases.
+        Crea una nueva instancia del conector mysql usando parámetros de conexión.
         """
         self.db = mysql.connector.connect(
             host='localhost',
@@ -35,10 +35,10 @@ class DBConnector:
 
     def execute_query(self, sql_query: str, parameters: tuple):
         """
-        Method for executing a query with or without parameters.
-        :param sql_query: A valid SQL query based on sql_dict.
-        :param parameters: A tuple which contains information related to sql_query.
-        :return: a list of results containing information.
+        Método para ejecutar una consulta con o sin parámetros.
+        :param sql_query: Una consulta SQL válida basada en sql_dict.
+        :param parameters: Una tupla que contiene información relacionada con sql_query.
+        :return: una lista de resultados que contiene información.
         """
         cursor = self.db.cursor()
         if parameters is not None:

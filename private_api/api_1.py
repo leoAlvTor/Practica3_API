@@ -1,17 +1,17 @@
-# Libraries for API definition
+# Librerias para la definición de API
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-# Class for Mysql database connection.
+# Clase para la conexión a la base de datos Mysql.
 import mysql_utility
 import smtplib
 
-# FastAPI instantiation.
+# Creación de instancias de FastAPI.
 app = FastAPI()
 db_connection = mysql_utility.DBConnector()
 
-# CORS definition.
+#Definición de CORS.
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -20,15 +20,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-def listToStringWithoutBrackets(list1):
-    return str(list1).replace('(', '').replace(')', '').replace(',', '').replace('[', '').replace(']', '').replace('{',
-                                                                                                                   '').replace(
-        '}', '')
-
-
+#Metodo POST Y PATH
 @app.post('/api/private/send_mail')
 async def send_mail(cedula, motivo, monto):
+    """
+    Funcion para enviar un mail
+    :param cedula: ID usuario (str)
+    :param motivo: descripcion (str)
+    :param monto: cantidad de dinero (str)
+    :return: status successful si el case es diferente de 0
+    """
     print('cedula:', cedula, ' <---')
     query_return = db_connection.execute_query(db_connection.sql_dict.get('buscar_usuario'),
                                                (cedula,))
@@ -45,6 +46,13 @@ async def send_mail(cedula, motivo, monto):
 
 
 def send_email(correo, descripcion, valor):
+    """
+    funcion para enviar correo de una cuenta origen
+    :param correo: ID usuario (str)
+    :param descripcion: Descripcion (str)
+    :param valor: valor monetario (str)
+    :return: Email sent caso contrario devuelve exception e
+    """
     gmail_user = 'alvaradolayonardo@gmail.com'
     gmail_password = 'mqjjqbpmctkleorb'
 

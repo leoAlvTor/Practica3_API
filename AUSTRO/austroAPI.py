@@ -1,19 +1,19 @@
-# Libraries for API definition
+# Librerias
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-# Class for Mysql database connection.
+# libreria para generar la conexion con la BD
 from pydantic import BaseModel
-
+#importamos la clase AustroBD_utility donde se encuentran las sentencias a usar
 import AustroDB_utility
 
 
-# FastAPI instantiation.
+# instanciamiento de FastApi.
 app = FastAPI()
 au_conecction = AustroDB_utility.DBConnector()
 
-# CORS definition.
+# Definicion cors.
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -23,7 +23,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Class for request model parameters.
+
+#Clase para los parámetros del modelo de solicitud.
 class Transferencia(BaseModel):
     cedula: str
     institucion_destino: str
@@ -32,8 +33,14 @@ class Transferencia(BaseModel):
     monto: float
     motivo: str
 
+#Metodo GET y PATH
 @app.get('/austro/private/cuenta')
 async def institucion(cedula: str):
+    """
+    funcion para saber a que institucion pertenece un usuario
+    :param cedula: ID Usuario (str)
+    :return: status devuelve 0 si la cedula ingresada no existe de lo contrario status devuelve 1
+    """
     austro = au_conecction.execute_query(au_conecction.sql_dict.get('obtener_institucion'), (cedula,))
     match len(austro):
         case 0:
@@ -41,9 +48,16 @@ async def institucion(cedula: str):
         case _:
             return {'status': '1'}
 
-
+#Metodo POST y PATH
 @app.post('/austro/private/debito')
 async def debito(cedula , origen , monto ):
+    """
+    Funcion que realiza el debito de dinero al usuario
+    :param cedula: ID usuario (str)
+    :param origen: ingresamos el parametro origen (str)
+    :param monto: ingresamos el parametro monto (str)
+    :return: status devuelve que el deposito ha sido realizado si el saldo actual es mayor al monto de lo contrario el status devuelve error en la transaccion
+    """
     saldo_actual=au_conecction.execute_query(au_conecction.sql_dict.get('saldo_actual'),(cedula,origen))
     if len(saldo_actual) >0:
         if saldo_actual[0][0] > float(monto):
@@ -53,20 +67,29 @@ async def debito(cedula , origen , monto ):
             return {'status': 'Debito Realizado'}
         return {'status': 'Error en la transaccion'}
 
+#Metodo POST y PATH
 @app.post('/austro/private/deposito')
 async def deposito(cedula , destino , monto):
+    """
+    Funcion que realiza el deposito de dinero al usuario
+    :param cedula: ingresamos el parametro cedula (str)
+    :param destino: ingresamos el parametro destino (str)
+    :param monto: ingresamos el parametro monto (str)
+    :return: Realizada la query el status devuelve el siguiente mensaje -> deposito realizado
+    """
     deposito=au_conecction.execute_query(au_conecction.sql_dict.get('deposito'),(monto,cedula,destino))
     au_conecction.execute_query('commit', None)
     return {'status': 'Deposito Realizado'}
 
-@app.get('/api/private/mis_cuentas')
+#Metodo GET y PATH
+@app.get('/austro/private/mis_cuentas')
 async def get_cuentas(cedula: str):
     """
-    Function for getting all economic accounts by user.
-    :param cedula: The user ID
-    :return: status with data related to accounts number otherwise return an error.
+    Función para obtener todas las cuentas bancarias por usuario.
+    :param cedula: ID del usuario (str)
+    :return: status con datos relacionados con el número de cuenta, de lo contrario, devuelve un error.
     """
-    query_return = db_connection.execute_query(db_connection.sql_dict.get('mis_cuentas'), (cedula,))
+    query_return = au_conecction.execute_query(au_conecction.sql_dict.get('mis_cuentas'), (cedula,))
     match len(query_return):
         case 0:
             return {'status': 'No hay cuentas asociadas a la cedula ingresada.'}
