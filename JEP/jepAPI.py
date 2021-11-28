@@ -57,7 +57,7 @@ async def debito(cedula, origen, monto):
 
 #Metodo POST y URL
 @app.post('/jep/private/deposito')
-async def deposito(cedula , destino , monto ):
+async def deposito(destino , monto ):
     """
         Funcion que realiza el deposito de dinero al usuario
         :param cedula: ingresamos el parametro cedula (str)
@@ -65,7 +65,7 @@ async def deposito(cedula , destino , monto ):
         :param monto: ingresamos el parametro monto (str)
         :return: Realizada la query el status devuelve el siguiente mensaje -> deposito realizado
         """
-    deposito = je_connection.execute_query(je_connection.sql_dict.get('deposito'), (monto, cedula, destino))
+    deposito = je_connection.execute_query(je_connection.sql_dict.get('deposito'), (monto, destino))
     je_connection.execute_query('commit', None)
     return {'status': 'Deposito Realizado'}
 
